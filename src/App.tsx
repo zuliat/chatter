@@ -4,7 +4,7 @@ import { path } from "./Router/router";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Feeds";
 import ConfirmCode from "./pages/Confirmcode";
 
 function App() {

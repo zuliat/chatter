@@ -6,7 +6,11 @@ import linkd from "../assets/174857 1.png";
 import { Link, useNavigate } from "react-router-dom";
 import { path } from "../Router/router";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -23,6 +27,19 @@ const Login: React.FC = () => {
       })
       .catch((error) => {
         setError("Invalid email or password.");
+        console.log(error);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        setError("Google sign-in failed. Please try again.");
         console.log(error);
       });
   };
@@ -109,10 +126,14 @@ const Login: React.FC = () => {
             </Link>
           </div>
           <div className="">
-            <button className="items-center cursor-pointer justify-center flex appearance-none text-lg rounded-lg border bg-white-200 shadow w-full py-4 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
+            <button
+              className="items-center cursor-pointer justify-center flex appearance-none text-lg rounded-lg border bg-white-200 shadow w-full py-4 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none"
+              onClick={handleGoogleSignIn}
+            >
               <img className="mr-2" src={goggle} alt="" />
-              <h1>Sign up with Goggle</h1>
+              <h1>Sign up with Google</h1>
             </button>
+
             <button className="items-center cursor-pointer justify-center flex appearance-none text-lg rounded-lg border bg-white-200 shadow w-full py-4 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
               <img className="mr-2" src={linkd} alt="" />
               <h1>Sign up with Linkedin</h1>

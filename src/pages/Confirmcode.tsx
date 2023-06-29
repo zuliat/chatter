@@ -28,13 +28,12 @@ const ConfirmCode: React.FC = () => {
       </div>
       <div className="flex flex-col justify-center items-center w-full md:w-2/3 mx-auto mt-2 p-12">
         <div className="flex text-center  mb-10">
-          <h1 className="text-3xl ">Enter confirmation code</h1>
+          <h1 className="text-3xl ">Verify Account</h1>
         </div>
         <h3 className="text-center">
-          We emailed you a code. Please input the code here for account
-          verification
+          We emailed you a verificaiton link. Please check your email for a verification link
         </h3>
-        <div className="flex justify-center mt-8">
+        {/* <div className="flex justify-center mt-8">
           <input
             type="text"
             className="w-16 h-16 bg-gray-200  rounded-lg mx-4 text-center"
@@ -51,7 +50,7 @@ const ConfirmCode: React.FC = () => {
             type="text"
             className="w-16 h-16 bg-gray-200 rounded-lg mx-4 text-center"
           />
-        </div>
+        </div> */}
 
         <div className="flex items-center w-full md:w-1/2 justify-between mt-6">
           <button

@@ -5,7 +5,12 @@ import goggle from "../assets/goggle.png";
 import linkd from "../assets//174857 1.png";
 import { Link, useNavigate } from "react-router-dom";
 import { path } from "../Router/router";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "../firebase";
 
 const Register: React.FC = () => {
@@ -16,35 +21,47 @@ const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      sendEmailVerification(user)
-        .then(() => {
-          console.log("Email verification sent");
-          navigate("/confirmcode");
-        })
-        .catch((error) => {
-          console.log(error);
-          setErrorMessage("Failed to send verification email");
-        });
-    })
-    .catch((error) => {
-      console.log(error);
-      setErrorMessage("Email already in use");
-    });
+      .then((userCredential) => {
+        const user = userCredential.user;
+        sendEmailVerification(user)
+          .then(() => {
+            console.log("Email verification sent");
+            navigate("/confirmcode");
+          })
+          .catch((error) => {
+            console.log(error);
+            setErrorMessage("Failed to send verification email");
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage("Email already in use");
+      });
 
-      if (password !== confirmPassword) {
-        setPasswordError(true);
-        return;
-      }
+    if (password !== confirmPassword) {
+      setPasswordError(true);
+      return;
+    }
   };
 
-  
+  const handleGoogleSignUp = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        setError("Google sign-in failed. Please try again.");
+        console.log(error);
+      });
+  };
 
   return (
     <div className="flex flex-col md:flex-row flex-b h-screen items-center">
@@ -165,18 +182,19 @@ const Register: React.FC = () => {
               Confirm password
             </label>
             <input
-  className={`appearance-none text-lg rounded-lg shadow border bg-white w-full py-4 px-3 text-gray-700 mb-4 leading-tight focus:outline-none ${
-    passwordError ? 'border-red-500' : ''}`}
-  id="password"
-  type="password"
-  placeholder="******************"
-  value={confirmPassword}
-  onChange={(e) => setConfirmPassword(e.target.value)}
-  required
-/>
-{passwordError && (
-  <p className="text-red-500 text-sm">Passwords do not match</p>
-)}
+              className={`appearance-none text-lg rounded-lg shadow border bg-white w-full py-4 px-3 text-gray-700 mb-4 leading-tight focus:outline-none ${
+                passwordError ? "border-red-500" : ""
+              }`}
+              id="password"
+              type="password"
+              placeholder="******************"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            {passwordError && (
+              <p className="text-red-500 text-sm">Passwords do not match</p>
+            )}
             {errorMessage && (
               <p className="text-red-500 text-sm">{errorMessage}</p>
             )}
@@ -201,14 +219,17 @@ const Register: React.FC = () => {
             </h1>
           </div>
           <div className="">
-            <div className="items-center justify-center flex border shadow  appearance-none text-lg rounded-lg bg-white w-full py-3 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
+            <button
+              onClick={handleGoogleSignUp}
+              className="items-center justify-center flex border shadow  appearance-none text-lg rounded-lg bg-white w-full py-3 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none"
+            >
               <img className="mr-2" src={goggle} alt="" />
               <h1>Sign up with Goggle</h1>
-            </div>
-            <div className="items-center justify-center flex appearance-none text-lg rounded bg-white shadow border w-full py-3 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
+            </button>
+            <button className="items-center justify-center flex appearance-none text-lg rounded bg-white shadow border w-full py-3 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
               <img className="mr-2" src={linkd} alt="" />
               <h1>Sign up with Linkedin</h1>
-            </div>
+            </button>
           </div>
         </form>
       </div>
