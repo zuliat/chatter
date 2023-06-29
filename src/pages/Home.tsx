@@ -6,8 +6,8 @@ import img1 from "../assets/unsplash_ZHvM3XIOHoE.png";
 import img2 from "../assets/img1.png";
 import img3 from "../assets/img2.png";
 import img4 from "../assets/img3.png";
-
-import { AiOutlineLineChart } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { path } from "../Router/router";
 
 const Home: React.FC = () => {
   return (
@@ -28,9 +28,11 @@ const Home: React.FC = () => {
                       Readers and Writers
                     </h2>
                   </div>
-                  <button className="homeSectionButtonContainer">
-                    <div className="get-started">Get Started</div>
-                  </button>
+                  <Link to={path.REGISTER}>
+                    <button className="homeSectionButtonContainer">
+                      <div className="get-started">Get Started</div>
+                    </button>
+                  </Link>
                 </div>
               </header>
             </section>
@@ -54,7 +56,7 @@ const Home: React.FC = () => {
                 </p>
               </div>
             </div>
-            <img src={frame} className="aboutImg" alt="" />
+            <img src={frame} className="aboutImg" alt="about" />
           </div>
         </section>
 
@@ -133,16 +135,16 @@ const Home: React.FC = () => {
             <div className="getStartedInfo">
               <div className="frame-38">
                 <div className="mask-group">
-                  <img className="rounded-1" src={img2} />
+                  <img className="rounded-1" src={img2} alt="" />
                 </div>
 
                 <div className="mask-group">
-                  <img className="rounded-2" src={img3} />
+                  <img className="rounded-2" src={img3} alt="" />
                 </div>
               </div>
 
               <div className="mask-group">
-                <img className="rounded-3" src={img4} />
+                <img className="rounded-3" src={img4} alt="" />
               </div>
             </div>
 
@@ -159,39 +161,41 @@ const Home: React.FC = () => {
                 </div>
               </div>
 
-              <div className="getStartedButtonContainer">
-                <div className="get-started">Get started</div>
-              </div>
+              <Link to={path.REGISTER}>
+                <div className="getStartedButtonContainer">
+                  <div className="get-started">Get started</div>
+                </div>
+              </Link>
             </div>
           </div>
         </section>
 
         <footer className="homeFooter">
-        <div className="footer-container">
-          <div className="footerTable">
-          <div className="footerLogo">
-            <div className="footerLogoText">CHATTER</div>
+          <div className="footer-container">
+            <div className="footerTable">
+              <div className="footerLogo">
+                <div className="footerLogoText">CHATTER</div>
+              </div>
+              <ul>
+                <li className="footerliHeader">Explore</li>
+                <li>Community</li>
+                <li>Trending Blog</li>
+                <li>Chatting for terms</li>
+              </ul>
+              <ul>
+                <li className="footerliHeader">Support</li>
+                <li>Support docs</li>
+                <li>join slack</li>
+                <li>contact us</li>
+              </ul>
+              <ul>
+                <li className="footerliHeader">Official blog</li>
+                <li>official blog</li>
+                <li>Engineering blog</li>
+              </ul>
+            </div>
           </div>
-            <ul>
-              <li className="footerliHeader">Explore</li>
-              <li>Community</li>
-              <li>Trending Blog</li>
-              <li>Chatting for terms</li>
-            </ul>
-            <ul>
-              <li className="footerliHeader">Support</li>
-              <li>Support docs</li>
-              <li>join slack</li>
-              <li>contact us</li>
-            </ul>
-            <ul>
-              <li className="footerliHeader">Official blog</li>
-              <li>official blog</li>
-              <li>Engineering blog</li>
-            </ul>
-          </div>
-        </div>
-      </footer>
+        </footer>
       </div>
     </>
   );
