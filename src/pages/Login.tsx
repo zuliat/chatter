@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles/login.css";
 import bg from "../assets/backg.png";
 import goggle from "../assets/goggle.png";
 import linkd from "../assets/174857 1.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { path } from "../Router/router";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log(userCredential);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        setError("Invalid email or password.");
+        console.log(error);
+      });
+  };
+
   return (
     <div className="flex flex-col md:flex-row flex-b h-screen mt-4">
       <div className="w-full md:w-1/3">
@@ -14,6 +34,7 @@ const Login: React.FC = () => {
           <img
             className="w-[622px] h-[1024px] left-0 top-0 absolute hidden xl:block"
             src={bg}
+            alt=""
           />
           <div className="w-[622px] h-[1024px] left-0 top-0 absolute bg-black bg-opacity-50 hidden xl:block" />
           <div className="left-[36px] top-[385px] absolute flex-col justify-center items-center gap-6 inline-flex">
@@ -39,7 +60,7 @@ const Login: React.FC = () => {
         <div className="flex mt-5 mb-10">
           <h1 className="text-3xl">Welcome Back</h1>
         </div>
-        <form className="w-full max-w-lg">
+        <form className="w-full max-w-lg" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -52,6 +73,9 @@ const Login: React.FC = () => {
               id="username"
               type="text"
               placeholder="abdulkyacee@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div className="mb-4">
@@ -63,38 +87,44 @@ const Login: React.FC = () => {
               id="password"
               type="password"
               placeholder="******************"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
-          <Link to="/">
-            <div className="flex items-center justify-between mt-5">
-              <button
-                className="appearance-none rounded text-white text-lg font-bold bg-blue-900 hover:bg-blue-700 w-full py-4 px-4 mt-3 leading-tight focus:outline-none focus:shadow-outline"
-                type="button"
-              >
-                Log in
-              </button>
-            </div>
-          </Link>
+          {error && <div className="text-red-500 mb-4">{error}</div>}
+
+          <div className="flex items-center justify-between mt-5">
+            <button
+              className="appearance-none rounded text-white text-lg font-bold bg-blue-900 hover:bg-blue-700 w-full py-4 px-4 mt-3 leading-tight focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Log in
+            </button>
+          </div>
           <div className="text-end cursor-pointer mt-2">
             <Link to="/">
               <h1 className="text-blue-700 font-bold">Forgot password?</h1>
             </Link>
           </div>
           <div className="">
-            <div className="items-center cursor-pointer justify-center flex appearance-none text-lg rounded-lg border bg-white-200 shadow w-full py-4 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
+            <button className="items-center cursor-pointer justify-center flex appearance-none text-lg rounded-lg border bg-white-200 shadow w-full py-4 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
               <img className="mr-2" src={goggle} alt="" />
               <h1>Sign up with Goggle</h1>
-            </div>
-            <div className="items-center cursor-pointer justify-center flex appearance-none text-lg rounded-lg border bg-white-200 shadow w-full py-4 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
+            </button>
+            <button className="items-center cursor-pointer justify-center flex appearance-none text-lg rounded-lg border bg-white-200 shadow w-full py-4 px-3 text-gray-700 mt-4 mb-4 leading-tight focus:outline-none">
               <img className="mr-2" src={linkd} alt="" />
               <h1>Sign up with Linkedin</h1>
-            </div>
+            </button>
           </div>
           <div className="text-center items-center">
             <h1>
               I don't have an account?{" "}
-              <Link className="text-blue-900 cursor-pointer font-bold" to={path.REGISTER}>
+              <Link
+                className="text-blue-900 cursor-pointer font-bold"
+                to={path.REGISTER}
+              >
                 Register
               </Link>
             </h1>

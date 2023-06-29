@@ -1,12 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles/register.css";
 import bg from "../assets/backg.png";
 import goggle from "../assets/goggle.png";
 import linkd from "../assets//174857 1.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { path } from "../Router/router";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { auth } from "../firebase";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      sendEmailVerification(user)
+        .then(() => {
+          console.log("Email verification sent");
+          navigate("/confirmcode");
+        })
+        .catch((error) => {
+          console.log(error);
+          setErrorMessage("Failed to send verification email");
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      setErrorMessage("Email already in use");
+    });
+
+      if (password !== confirmPassword) {
+        setPasswordError(true);
+        return;
+      }
+  };
+
+  
+
   return (
     <div className="flex flex-col md:flex-row flex-b h-screen items-center">
       <div className="w-full md:w-1/3">
@@ -15,6 +54,7 @@ const Login: React.FC = () => {
             <img
               className="w-[622px] h-[1024px] left-0 top-0 absolute hidden xl:block"
               src={bg}
+              alt=""
             />
             <div className="w-[622px] h-[1024px] left-0 top-0 absolute bg-black bg-opacity-50 hidden xl:block" />
             <div className="left-[36px] top-[385px] absolute flex-col justify-center items-center gap-6 inline-flex">
@@ -41,7 +81,7 @@ const Login: React.FC = () => {
         <div className="flex  mb-10">
           <h1 className="text-3xl">Register as a Writer/Reader</h1>
         </div>
-        <form className="w-full max-w-lg">
+        <form onSubmit={handleSubmit} className="w-full max-w-lg">
           <div className="flex mb-4">
             <div className="">
               <label className="block text-gray-700 text-sm mb-2">
@@ -52,6 +92,9 @@ const Login: React.FC = () => {
                 id="first name"
                 type="text"
                 placeholder="john"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
               />
             </div>
             <div className="ml-10">
@@ -63,6 +106,9 @@ const Login: React.FC = () => {
                 id="last name"
                 type="text"
                 placeholder="john"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -77,6 +123,7 @@ const Login: React.FC = () => {
               className="appearance-none text-lg border  rounded-lg shadow bg-white mb-3 w-full py-4 px-3 text-slate-500 leading-tight focus:outline-none focus:border-blue-500"
               id="username"
               placeholder="abdulkyacee@gmail.com"
+              required
             >
               <option className="text-sm">Writer</option>
               <option className="text-sm">Reader</option>
@@ -94,6 +141,9 @@ const Login: React.FC = () => {
               id="username"
               type="text"
               placeholder="abdulkyacee@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div className="mb-4">
@@ -105,6 +155,9 @@ const Login: React.FC = () => {
               id="password"
               type="password"
               placeholder="******************"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
           <div className="mb-4">
@@ -112,24 +165,37 @@ const Login: React.FC = () => {
               Confirm password
             </label>
             <input
-              className="appearance-none text-lg rounded-lg shadow border bg-white w-full py-4 px-3 text-gray-700 mb-4 leading-tight focus:outline-none focus:border-blue-500"
-              id="password"
-              type="password"
-              placeholder="******************"
-            />
+  className={`appearance-none text-lg rounded-lg shadow border bg-white w-full py-4 px-3 text-gray-700 mb-4 leading-tight focus:outline-none ${
+    passwordError ? 'border-red-500' : ''}`}
+  id="password"
+  type="password"
+  placeholder="******************"
+  value={confirmPassword}
+  onChange={(e) => setConfirmPassword(e.target.value)}
+  required
+/>
+{passwordError && (
+  <p className="text-red-500 text-sm">Passwords do not match</p>
+)}
+            {errorMessage && (
+              <p className="text-red-500 text-sm">{errorMessage}</p>
+            )}
           </div>
           <div className="flex items-center justify-between mt-2">
             <button
               className="appearance-none rounded text-white text-lg font-bold bg-blue-900 hover:bg-blue-700 w-full py-4 px-4 leading-tight focus:outline-none focus:shadow-outline"
-              type="button"
+              type="submit"
             >
               Create account
             </button>
           </div>
           <div className="text-center mt-2">
-          <h1>
+            <h1>
               Already have an account?{" "}
-              <Link to={path.LOGIN} className="text-blue-900 cursor-pointer font-bold">
+              <Link
+                to={path.LOGIN}
+                className="text-blue-900 cursor-pointer font-bold"
+              >
                 Login
               </Link>
             </h1>
@@ -150,4 +216,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

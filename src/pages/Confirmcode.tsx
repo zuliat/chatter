@@ -1,8 +1,18 @@
 import React from "react";
 import "./styles/register.css";
 import bg from "../assets/backg.png";
+import { useNavigate } from "react-router-dom";
 
-const Login: React.FC = () => {
+
+const ConfirmCode: React.FC = () => {
+  const navigate = useNavigate();
+
+
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    navigate("/dashboard");
+  };
+  
   return (
     <div className="flex flex-col md:flex-row flex-b h-screen items-center">
       <div className="w-full md:w-1/3">
@@ -17,8 +27,8 @@ const Login: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center w-full md:w-2/3 mx-auto mt-2 p-12">
-        <div className="flex  mb-10">
-          <h1 className="text-3xl">Enter confirmation code</h1>
+        <div className="flex text-center  mb-10">
+          <h1 className="text-3xl ">Enter confirmation code</h1>
         </div>
         <h3 className="text-center">
           We emailed you a code. Please input the code here for account
@@ -46,7 +56,8 @@ const Login: React.FC = () => {
         <div className="flex items-center w-full md:w-1/2 justify-between mt-6">
           <button
             className="appearance-none rounded text-white text-lg font-bold bg-blue-900 hover:bg-blue-700 w-full py-4 px-4 leading-tight focus:outline-none focus:shadow-outline"
-            type="button"
+            type="submit"
+            onClick={handleSubmit}
           >
             Create account
           </button>
@@ -56,4 +67,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default ConfirmCode;
