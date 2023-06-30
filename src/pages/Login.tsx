@@ -45,20 +45,20 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row flex-b h-screen mt-4">
+    <div className="flex flex-col md:flex-row flex-b h-screen mt-4 -mr-20 ml-20">
       <div className="w-full md:w-1/3">
-        <div className="flex justify-center items-center md:h-screen">
+        <div className="flex justify-center items-center md:h-screen ">
           <img
-            className="w-[622px] h-[1024px] left-0 top-0 absolute hidden xl:block"
+            className="w-[622px] h-[1024px] left-0 top-0 absolute  xl:block"
             src={bg}
-            alt=""
+            alt="background"
           />
           <div className="w-[622px] h-[1024px] left-0 top-0 absolute bg-black bg-opacity-50 hidden xl:block" />
           <div className="left-[36px] top-[385px] absolute flex-col justify-center items-center gap-6 inline-flex">
-            <div className="text-white text-[48px] font-bold leading-10 hidden xl:block">
+            <div className="text-white text-[48px] font-bold leading-10  xl:block">
               CHATTER
             </div>
-            <div className="w-[550px] text-white text-[24px] font-medium leading-9 hidden xl:block">
+            <div className="w-[550px] text-white text-[24px] font-medium leading-9  xl:block">
               Unleash the Power of Words, Connect with Like-minded Readers and
               Writers
             </div>

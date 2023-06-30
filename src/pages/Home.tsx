@@ -125,7 +125,7 @@ const Home: React.FC = () => {
               </button>
             </div>
             <div className="joinSectionImg">
-              <img className="img" src={img1} alt="" />
+              <img className="img" src={img1} alt=" " />
             </div>
           </div>
         </section>
